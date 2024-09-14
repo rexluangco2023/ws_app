@@ -38,33 +38,39 @@ def create_customer():
     data = request.json
     customer_id = data.get('customerId')
     
-    if customer_id in customers:
+    if customer_id in customers["customers"]:
         return jsonify({"error": "Customer ID already exists"}), 400
     else:
-        customers[customer_id] = {
+        customers["customers"][customer_id] = {
+          "personal_info": {
             "name": data.get("name"),
-            "email": data.get("email"),
-            "status": data.get("status"),
-            "phone": data.get("phone"),
-            "address": data.get("address"),
             "date_of_birth": data.get("date_of_birth"),
+            "email": data.get("email"),
+            "phone": data.get("phone"),
+            "address": data.get("address")
+          },
+          "account_details": {
+            "status": data.get("status"),
             "membership_level": data.get("membership_level"),
-            "last_purchase_date": data.get("last_purchase_date"),
-            "preferred_contact_method": data.get("preferred_contact_method"),
-            "department": data.get("department"),
             "loyalty_points": data.get("loyalty_points"),
+            "last_purchase_date": data.get("last_purchase_date"),
+            "preferred_contact_method": data.get("preferred_contact_method")
+          },
+          "professional_info": {
+            "department": data.get("department"),
             "account_manager": data.get("account_manager")
+          }
         }
-        return jsonify(customers[customer_id]), 201
+        return jsonify(customers["customers"][customer_id]), 201
 
 @app.route('/api/customers', methods=['GET'])
 def get_all_customers():
     return jsonify(customers), 200
-    
+
 @app.route('/api/customers/grouped', methods=['GET'])
 def get_grouped_customers():
     grouped_customers = {}
-    for customer_id, customer_data in customers.items():
+    for customer_id, customer_data in customers["customers"].items():
         group_key = customer_id[0]  # Group by the first digit of the customer ID
         if group_key not in grouped_customers:
             grouped_customers[group_key] = []
@@ -73,20 +79,39 @@ def get_grouped_customers():
 
 @app.route('/api/customer/<customer_id>', methods=['GET'])
 def get_customer_by_id(customer_id):
-    if customer_id in customers:
-        return jsonify(customers[customer_id]), 200
+    if customer_id in customers["customers"]:
+        return jsonify(customers["customers"][customer_id]), 200
     else:
         return jsonify({"error": "Customer not found"}), 404
 
 @app.route('/api/customer/<customer_id>', methods=['PUT'])
 def update_customer(customer_id):
-    if customer_id in customers:
+    if customer_id in customers["customers"]:
         data = request.json
-        customers[customer_id].update(data)
-        return jsonify(customers[customer_id]), 200
+        customers["customers"][customer_id].update({
+          "personal_info": {
+            "name": data.get("name"),
+            "date_of_birth": data.get("date_of_birth"),
+            "email": data.get("email"),
+            "phone": data.get("phone"),
+            "address": data.get("address")
+          },
+          "account_details": {
+            "status": data.get("status"),
+            "membership_level": data.get("membership_level"),
+            "loyalty_points": data.get("loyalty_points"),
+            "last_purchase_date": data.get("last_purchase_date"),
+            "preferred_contact_method": data.get("preferred_contact_method")
+          },
+          "professional_info": {
+            "department": data.get("department"),
+            "account_manager": data.get("account_manager")
+          }
+        })
+        return jsonify(customers["customers"][customer_id]), 200
     else:
         return jsonify({"error": "Customer not found"}), 404
-        
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
