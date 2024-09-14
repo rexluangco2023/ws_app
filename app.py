@@ -207,6 +207,16 @@ def create_customer():
 def get_all_customers():
     return jsonify(customers), 200
     
+@app.route('/api/customers/grouped', methods=['GET'])
+def get_grouped_customers():
+    grouped_customers = {}
+    for customer_id, customer_data in customers.items():
+        group_key = customer_id[0]  # Group by the first digit of the customer ID
+        if group_key not in grouped_customers:
+            grouped_customers[group_key] = []
+        grouped_customers[group_key].append({customer_id: customer_data})
+    return jsonify(grouped_customers), 200
+
 @app.route('/api/customer/<customer_id>', methods=['GET'])
 def get_customer_by_id(customer_id):
     if customer_id in customers:
