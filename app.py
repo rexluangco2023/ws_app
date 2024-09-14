@@ -180,15 +180,28 @@ def hello_world():
     return jsonify(message="Genesys Cloud Web Service Data Action Example")
 
 @app.route('/api/customer', methods=['POST'])
-def get_customer_data():
-    # Get the customer ID from the request JSON
+def create_customer():
     data = request.json
     customer_id = data.get('customerId')
     
     if customer_id in customers:
-        return jsonify(customers[customer_id]), 200
+        return jsonify({"error": "Customer ID already exists"}), 400
     else:
-        return jsonify({"error": "Customer not found"}), 404
+        customers[customer_id] = {
+            "name": data.get("name"),
+            "email": data.get("email"),
+            "status": data.get("status"),
+            "phone": data.get("phone"),
+            "address": data.get("address"),
+            "date_of_birth": data.get("date_of_birth"),
+            "membership_level": data.get("membership_level"),
+            "last_purchase_date": data.get("last_purchase_date"),
+            "preferred_contact_method": data.get("preferred_contact_method"),
+            "department": data.get("department"),
+            "loyalty_points": data.get("loyalty_points"),
+            "account_manager": data.get("account_manager")
+        }
+        return jsonify(customers[customer_id]), 201
 
 @app.route('/api/customer/<customer_id>', methods=['GET'])
 def get_customer_by_id(customer_id):
