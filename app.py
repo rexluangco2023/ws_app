@@ -203,6 +203,10 @@ def create_customer():
         }
         return jsonify(customers[customer_id]), 201
 
+@app.route('/api/customers', methods=['GET'])
+def get_all_customers():
+    return jsonify(customers), 200
+    
 @app.route('/api/customer/<customer_id>', methods=['GET'])
 def get_customer_by_id(customer_id):
     if customer_id in customers:
