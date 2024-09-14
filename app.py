@@ -12,7 +12,12 @@ customers = {
         "date_of_birth": "1980-01-01",
         "email": "john.doe@example.com",
         "phone": "123-456-7890",
-        "address": "123 Main St, Anytown, USA"
+        "address": "123 Main St, Anytown, USA",
+        "work_details": {
+          "position": "Sales Manager",
+          "salary": "75000",
+          "hire_date": "2015-06-01"
+        }
       },
       "account_details": {
         "status": "active",
