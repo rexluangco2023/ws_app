@@ -197,6 +197,15 @@ def get_customer_by_id(customer_id):
     else:
         return jsonify({"error": "Customer not found"}), 404
 
+@app.route('/api/customer/<customer_id>', methods=['PUT'])
+def update_customer(customer_id):
+    if customer_id in customers:
+        data = request.json
+        customers[customer_id].update(data)
+        return jsonify(customers[customer_id]), 200
+    else:
+        return jsonify({"error": "Customer not found"}), 404
+        
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
