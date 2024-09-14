@@ -23,7 +23,12 @@ customers = {
       },
       "professional_info": {
         "department": "Sales",
-        "account_manager": "Sarah Lee"
+        "account_manager": "Sarah Lee",
+        "work_details": {
+          "position": "Sales Manager",
+          "salary": "75000",
+          "hire_date": "2015-06-01"
+        }
       }
     }
   }
@@ -58,7 +63,12 @@ def create_customer():
           },
           "professional_info": {
             "department": data.get("department"),
-            "account_manager": data.get("account_manager")
+            "account_manager": data.get("account_manager"),
+            "work_details": {
+              "position": data.get("position"),
+              "salary": data.get("salary"),
+              "hire_date": data.get("hire_date")
+            }
           }
         }
         return jsonify(customers["customers"][customer_id]), 201
@@ -90,7 +100,7 @@ def get_customer_personal_details(customer_id):
         return jsonify(customers["customers"][customer_id]["personal_info"]), 200
     else:
         return jsonify({"error": "Customer not found"}), 404
-      
+
 @app.route('/api/customer/<customer_id>', methods=['PUT'])
 def update_customer(customer_id):
     if customer_id in customers["customers"]:
@@ -112,7 +122,12 @@ def update_customer(customer_id):
           },
           "professional_info": {
             "department": data.get("department"),
-            "account_manager": data.get("account_manager")
+            "account_manager": data.get("account_manager"),
+            "work_details": {
+              "position": data.get("position"),
+              "salary": data.get("salary"),
+              "hire_date": data.get("hire_date")
+            }
           }
         })
         return jsonify(customers["customers"][customer_id]), 200
