@@ -84,6 +84,13 @@ def get_customer_by_id(customer_id):
     else:
         return jsonify({"error": "Customer not found"}), 404
 
+@app.route('/api/customer/<customer_id>/personal', methods=['GET'])
+def get_customer_personal_details(customer_id):
+    if customer_id in customers["customers"]:
+        return jsonify(customers["customers"][customer_id]["personal_info"]), 200
+    else:
+        return jsonify({"error": "Customer not found"}), 404
+      
 @app.route('/api/customer/<customer_id>', methods=['PUT'])
 def update_customer(customer_id):
     if customer_id in customers["customers"]:
